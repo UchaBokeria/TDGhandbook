@@ -1,9 +1,10 @@
-export default class ReactiveSearch {
+export class ReactiveSearch {
     constructor() {
-        
+        console.log(1);
     }
 
     init = async () => {
+        console.log(2);
         
     }
 
@@ -18,9 +19,4 @@ export default class ReactiveSearch {
     BuildDialog = async() => {
 
     }
-
-    BuildRequest = async() => {
-
-    }
-
 }

@@ -5,16 +5,26 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "serve": "webpack serve",
+    "webpack-dev-server": "webpack-dev-server",
+    "dev": "webpack-dev-server --mode=development",
+    "prod": "webpack --mode=production"
+  
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "webpack-cli": "^4.9.1"
+    "html-webpack-plugin": "^5.5.0",
+    "path": "^0.12.7",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.2"
   },
   "dependencies": {
-    "http-client": "^4.3.1",
-    "lodash": "^4.17.21"
+    "ajax-client": "^2.1.1",
+    "lodash": "^4.17.21",
+    "socket.io": "^4.4.0"
   }
 }

@@ -1,23 +1,30 @@
-import { query } from "http-client";
-import "HttpRequester.js";
+import HttperClient from "./HttperClient.module";
 
-export default class Handbook extends HttpRequester {
-    constructor(configure) {
+export class Handbook extends HttperClient {
+    constructor() {
+        super();
         this.source = null;
         this.output = null;
         this.dialog = null;
         this.chosen = null;
         this.column = null;
-        this.configure = configure;
     }
 
-    Build = async () => {
-        this.source = await this.BuildRequest();
+    Build = async (configure) => {
+        this.configure = configure;
+        this.source = await this.BuildRequest({
+            data: {}
+        });
+
+        if(this.resource == null) return null;
         this.output = await this.BuildTable();
+        
         return this.output;
     }
 
     BuildTable = async () => {
+        document.querySelector(this.configure.area).innerHTML = "";
+
         this.output = document.createElement("table");
         this.output.setAttribute("id", "MainTable");
 
@@ -56,7 +63,7 @@ export default class Handbook extends HttpRequester {
         this.output.append(thead);
         this.output.append(tbody);
 
-        document.querySelector(this.configure.area).append(this.output);
+        document.querySelector(this.configure.Area).append(this.output);
     }
 
     BuildDialog = async() => {
