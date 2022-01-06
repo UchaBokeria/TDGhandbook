@@ -3,10 +3,9 @@ import { Http } from "./HttperClient.module";
 import { Handbook } from "./Handbook.module";
 import { ReactiveSearch } from "./ReactiveSearch.module";
 
-async function component() {
-  var element = document.createElement('div');
-  element.innerHTML = "halo";
-  document.body.appendChild(element);
+async function background() {
+  document.querySelector('body').style.background = "url(Logo.gif) no-repeat";
+  document.querySelector('body').style.backgroundSize = "100% 100%";
 }
 
 
@@ -41,5 +40,5 @@ async function doit() {
   return table;
 }
 
-component()
+background()
 doit();

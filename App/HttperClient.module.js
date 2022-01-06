@@ -2,15 +2,15 @@ import {AjaxClient2 as AjaxClient} from 'ajax-client';
 
 export default class HttperClient {
     constructor() {
-        this.url = "http://localhost:56/API/index.php";
+        this.url = "Handbook.json";
         this.client = new AjaxClient();
         this.lastData = null;
-        this.DefaultSuccess = async (x) => {}
+        this.DefaultSuccess = async (x) => {return x;}
     }
 
-    Get = async (params, aCallback) => {
+    Get = async (params = null, aCallback = async (e)=> {}) => {
         var anHttpRequest = new XMLHttpRequest();
-        anHttpRequest.onreadystatechange = () => { 
+        anHttpRequest.onreadystatechange = async () => { 
             if(anHttpRequest.readyState == 4 && anHttpRequest.status == 200) {
                 aCallback(anHttpRequest.responseText); 
                 this.lastData = anHttpRequest.responseText;
@@ -19,9 +19,9 @@ export default class HttperClient {
         }
         
         var parameters = "";
-        for (var [key, value] of Object.entries(data)) parameters += key + "=" + value;
+        if(params != null) for (var [key, value] of Object.entries(params)) parameters += key + "=" + value;
     
-        anHttpRequest.open( "GET" , this.url + parameters, params.async );            
+        anHttpRequest.open( "GET" , this.url + parameters, false );            
         anHttpRequest.send( null );
     }
 
@@ -38,7 +38,7 @@ export default class HttperClient {
         var parameters = "";
         var i = 0;
 
-        for (var [key, value] of Object.entries(data)) {
+        for (var [key, value] of Object.entries(params)) {
            if(i != 0) parameters += "&";
            parameters += key + "=" + value;
            i++;
@@ -48,10 +48,10 @@ export default class HttperClient {
         anHttpRequest.send( parameters );
     }
 
-    BuildRequest = async (x) => {
+    BuildRequest = async (x = {}) => {
         this.client.ajax({
             data: (x.hasOwnProperty("data")) ? JSON.stringify(x.data) : null,
-            type: (x.hasOwnProperty("method")) ? x.method : 'POST',
+            type: (x.hasOwnProperty("method")) ? x.method : 'GET',
             url: (x.hasOwnProperty("url")) ? x.url : this.url,
             contentType:  (x.hasOwnProperty("contentType")) ? x.contentType : 'application/json',
             dataType: (x.hasOwnProperty("dataType")) ? x.dataType : 'json',
