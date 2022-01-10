@@ -1,15 +1,14 @@
+
+import "./App.scss";
 import { Lodash } from "lodash";
 import { Http } from "./HttperClient.module";
 import { Handbook } from "./Handbook.module";
 import { ReactiveSearch } from "./ReactiveSearch.module";
 
-async function background() {
-  document.querySelector('body').style.background = "url(Logo.gif) no-repeat";
-  document.querySelector('body').style.backgroundSize = "100% 100%";
-}
+// document.querySelector('body').style.background = "url(Logo.gif) no-repeat";
+// document.querySelector('body').style.backgroundSize = "100% 100%";
 
-
-async function doit() {
+async function CreateTable() {
   var table = document.createElement('div');
 
   table.setAttribute("id", "poTable");
@@ -40,5 +39,4 @@ async function doit() {
   return table;
 }
 
-background()
-doit();
+CreateTable();

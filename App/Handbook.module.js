@@ -18,9 +18,14 @@ export class Handbook extends HttperClient {
         this.configure = configure;
         this.source = await this.BuildRequest({
             success: async (e) => {
+                if(e == null) {
+                    console.error(" Handbook Source Data Is Empty ");
+                    return;
+                }
+
                 this.source = e;
-                if(this.source == null) return null;
                 this.output = await this.BuildTable();
+                
                 return this.output;
             }
         });
@@ -34,7 +39,7 @@ export class Handbook extends HttperClient {
         this.output.setAttribute("id", "MainTable");
 
         this.configure.Table.Class.forEach( e => { this.output.classList.add(e); });
-        this.configure.Table.Attrs.forEach( e => { this.output.setAttribute(e.key, e.value); });
+        this.configure.Table.Attrs.forEach( e => { this.output.setAttribute(Object.entries(e)[0][0], Object.entries(e)[0][1]); });
         
         var thead = document.createElement("thead");
         var tbody = document.createElement("tbody");
@@ -51,7 +56,7 @@ export class Handbook extends HttperClient {
             row.setAttribute("tr-index", ind);
 
             this.configure.Row.Class.forEach( e => { row.classList.add(e); });
-            this.configure.Row.Attrs.forEach( e => { row.setAttribute(e.key, e.value); });
+            this.configure.Row.Attrs.forEach( e => { row.setAttribute(Object.entries(e)[0][0], Object.entries(e)[0][1]); });
             
             row.addEventListener("dblclick", async (e) => {
                 this.chosen = each;
@@ -63,7 +68,7 @@ export class Handbook extends HttperClient {
                 colEL.setAttribute("data-" + col, each[col]);
 
                 this.configure.Column.Class.forEach( e => { colEL.classList.add(e); });
-                this.configure.Column.Attrs.forEach( e => { colEL.setAttribute(e.key, e.value); });
+                this.configure.Column.Attrs.forEach( e => { colEL.setAttribute(Object.entries(e)[0][0], Object.entries(e)[0][1]); });
 
                 colEL.innerHTML = each[col]; 
                 colEL.setAttribute("col-key", col);
@@ -80,6 +85,9 @@ export class Handbook extends HttperClient {
     }
 
     BuildDialog = async() => {
+        if(document.querySelector("#MainDialog") != null)
+            document.querySelector("#MainDialog").remove();
+            
         this.dialog = document.createElement("div");
         this.dialog.setAttribute("id", "MainDialog");
         this.dialog.classList.add("MainDialog");
@@ -89,7 +97,7 @@ export class Handbook extends HttperClient {
         background.classList.add("Dark-Background");
 
         this.configure.Dialog.Class.forEach( e => { this.dialog.classList.add(e); });
-        this.configure.Dialog.Attrs.forEach( e => { this.dialog.setAttribute(e.key, e.value); });
+        this.configure.Dialog.Attrs.forEach( e => { this.dialog.setAttribute(Object.entries(e)[0][0], Object.entries(e)[0][1]); });
 
         Object.keys(this.chosen).forEach( key => {
             var icon  = document.createElement("i"); 
@@ -114,6 +122,7 @@ export class Handbook extends HttperClient {
         var save = document.createElement("button");
         save.setAttribute("id", "save-dialog");
         save.classList.add("save-dialog");
+        save.innerHTML = "Save";
         save.addEventListener("click", async (e) => {
             await this.SaveDialogData();
             document.querySelector("#MainDialog").remove();
@@ -123,10 +132,14 @@ export class Handbook extends HttperClient {
         var close = document.createElement("button");
         close.setAttribute("id", "close-dialog");
         close.classList.add("close-dialog");
+        close.innerHTML = "Close";
         close.addEventListener("click", async (e) => {
             document.querySelector("#MainDialog").remove();
             document.querySelector("#Dark-Background").remove();
         });
+
+        this.dialog.append(close);
+        this.dialog.append(save);
 
         document.querySelector("body").append(background);
         document.querySelector("body").append(this.dialog);
