@@ -1,5 +1,5 @@
 import "./Handbook.scss";
-import { Handbooker } from "./Handbook.module";
+import { HandbookModule } from "./Handbook.module";
 
 export var Handbook = async() => {
     var table = document.createElement('div');
@@ -7,7 +7,7 @@ export var Handbook = async() => {
     table.setAttribute("id", "poTable");
     document.body.appendChild(table);
     
-    new Handbooker().Build({
+    new HandbookModule().Build({
       Area: "#poTable",
       Table:  {
         Class: ["Table-oo"],

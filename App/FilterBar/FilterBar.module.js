@@ -1,4 +1,4 @@
-export class ReactiveSearch {
+export class FilterBarModule {
     constructor() {
         console.log(1);
     }

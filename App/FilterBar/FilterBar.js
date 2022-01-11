@@ -1,7 +1,7 @@
 import "./FilterBar.scss";
-import { ReactiveSearch } from "./FilterBar.module";
+import { FilterBarModule } from "./FilterBar.module";
 
 export var FilterBar = async() => {
 
-    new ReactiveSearch();
+    new FilterBarModule();
 }

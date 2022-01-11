@@ -1,12 +1,14 @@
 import HttperClient from "../HttperClient.module";
 
-export class Handbooker extends HttperClient {
+export class HandbookModule extends HttperClient {
     constructor() {
         super();
+        this.formFill = [];
         this.source = null;
         this.output = null;
         this.dialog = null;
         this.chosen = null;
+        this.undo = null;
         this.column = {
             id: "+",
             name: "სახელი",
@@ -49,11 +51,14 @@ export class Handbooker extends HttperClient {
             var colEL = document.createElement("td");
             colEL.setAttribute("col-key", col);
             colEL.innerHTML = this.column[col]; 
+
             if(col == "id") {
+                colEL.classList.add("Create-new");
                 colEL.addEventListener("click", async (e) => {
                     this.BuildDialog();
                 });
             }
+
             thead.append(colEL);
         });
 
@@ -91,6 +96,8 @@ export class Handbooker extends HttperClient {
     }
 
     BuildDialog = async() => {
+        this.undo = new Object();;
+
         if(document.querySelector("#MainDialog") != null)
             document.querySelector("#MainDialog").remove();
             
@@ -105,20 +112,28 @@ export class Handbooker extends HttperClient {
         this.configure.Dialog.Class.forEach( e => { this.dialog.classList.add(e); });
         this.configure.Dialog.Attrs.forEach( e => { this.dialog.setAttribute(Object.entries(e)[0][0], Object.entries(e)[0][1]); });
 
-        if(this.chosen == null) 
-            this.chosen = Object.entries(this.column).map((e)=>{  return "" });
+        if(this.chosen == null) {
+            this.chosen = new Object();
+            Object.keys(this.column).map( (inputKey) => {  this.chosen[inputKey] = "";   });
+        }
 
         Object.keys(this.chosen).forEach( key => {
             var icon  = document.createElement("i"); 
             var field = document.createElement("div");
             var input = document.createElement("input");
 
+
             if(this.chosen != null) {
                 icon.classList.add("icon-" + key);
-                icon.setAttribute("data-" + key, this.chosen[key]);
-                field.setAttribute("data-" + key, this.chosen[key]);
-                input.setAttribute("data-" + key, this.chosen[key]);
+                icon.setAttribute("data-val"  , this.chosen[key]);
+                field.setAttribute("data-val" , this.chosen[key]);
+                input.setAttribute("data-val" , this.chosen[key]);
+                input.setAttribute("dataKey", key);
+                
                 input.value = this.chosen[key];
+                this.undo[key] = this.chosen[key];
+
+                this.formFill.push(input);
             }
 
             field.append(icon);
@@ -133,6 +148,7 @@ export class Handbooker extends HttperClient {
         save.setAttribute("id", "save-dialog");
         save.classList.add("save-dialog");
         save.innerHTML = "Save";
+
         save.addEventListener("click", async (e) => {
             await this.SaveDialogData();
             document.querySelector("#MainDialog").remove();
@@ -143,6 +159,7 @@ export class Handbooker extends HttperClient {
         close.setAttribute("id", "close-dialog");
         close.classList.add("close-dialog");
         close.innerHTML = "Close";
+
         close.addEventListener("click", async (e) => {
             document.querySelector("#MainDialog").remove();
             document.querySelector("#Dark-Background").remove();
@@ -160,6 +177,17 @@ export class Handbooker extends HttperClient {
     }
 
     SaveDialogData = async () => {
+        var SendData = null;
 
+        var eachInput = new Object();
+        this.formFill.map( (e)=> { 
+            var key = e.getAttribute("datakey"); 
+            eachInput[key] = e.value;
+            SendData =  eachInput;
+        });
+
+        console.log({"undo" : this.undo})
+        console.log({"sendData" : SendData});
     } 
+    
 }
