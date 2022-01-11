@@ -1,0 +1,1 @@
+export var Serve = async(go) => { await go(); }

@@ -1,9 +1,8 @@
-import { FilterBar } from "./FilterBar/FilterBar";
-import { Handbook } from "./Handbook/Handbook";
-import { SideMenu } from "./SideMenu/SideMenu";
+import { Handbook } from "./Handbook";
 import { Auth } from "./Auth/Auth";
+import { Serve } from "./Serve";
 
-Auth();
-FilterBar();
-SideMenu();
-Handbook();
+Serve( async () => {
+    Auth();
+    await Handbook();
+});

@@ -1,41 +1,48 @@
-import HttperClient from "../HttperClient.module";
+import HttperClient from "./HttperClient.module";
+import ReactiveSearchModule from "./ReactiveSearch.module";
 
 export class HandbookModule extends HttperClient {
     constructor() {
         super();
+        
         this.formFill = [];
+        this.REsearch = null;
+        
         this.source = null;
         this.output = null;
         this.dialog = null;
         this.chosen = null;
         this.undo = null;
+
         this.column = {
             id: "+",
             name: "სახელი",
             version: "ვერსია"
         };
+        
     }
 
     Build = async (configure) => {
         this.configure = configure;
-        
-        await this.BuildRequest({
+
+        return await this.BuildRequest({
             success: async (e) => {
                 if(e == null) {
                     console.error(" Handbook Source Data Is Empty ");
                     return;
                 }
-
+                
                 this.source = e;
                 this.output = await this.BuildTable();
-                
-                return this.output;
+                this.REsearch = new ReactiveSearchModule(e);
+
+                return this.source;
             }
+
         });
     }
 
     BuildTable = async () => {
-        console.log(this.source)
         document.querySelector(this.configure.Area).innerHTML = "";
 
         this.output = document.createElement("table");
