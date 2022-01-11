@@ -1,4 +1,4 @@
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebPackPlugin = require( 'html-webpack-plugin' );
 const path = require('path');
 
@@ -25,6 +25,10 @@ module.exports = {
   },
   
   plugins: [
-    new HtmlWebPackPlugin()
+    new HtmlWebPackPlugin({
+      favicon: "Assets/Media/Logo.gif"
+    }),
+    
+    new BundleAnalyzerPlugin()
   ]
 };
